@@ -6,6 +6,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\AuthController;
 
 Route::prefix('api')->group(function () {
     // Ticketmaster Events (user query)
@@ -23,4 +24,16 @@ Route::prefix('api')->group(function () {
 
     // Email validation (user email)
     Route::post('/email/send-confirmation', [EmailController::class, 'sendConfirmation']);
+
+
+    # Authentication routes (Gateway Security)
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+    });
+
 });
